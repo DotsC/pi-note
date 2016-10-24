@@ -1,0 +1,48 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-card/paper-card.html"
+
+<!--
+`pi-note`
+PostIt Note WebComponent
+
+@demo demo/index.html 
+-->
+
+<dom-module id="pi-note">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --paper-card-header-color: rgba(255,255,255,1;
+      }
+
+      #card-body{
+      }
+    </style>
+    <paper-card id="card-body" heading=[[title]] image=[[imageUri]] preloadImage=true fadeImage=true alt="demo card">
+      <div class="card-content">[[note]]</div>
+    </paper-card>
+  </template>
+  <script>
+    Polymer({
+
+      is: 'pi-note',
+
+      properties: {
+        title: {
+          type: String,
+          value: 'NMD_R1',
+        },
+        note: {
+          type: String,
+          value: 'Built for today\'s urban nomad, the NMD merges the best of adidas innovation with progressive street-ready design. Modern construction and archival adidas technologies come together with the sleek, running-inspired NMD_R1. The men\'s deconstructed shoes feature reflective 3-Stripes on a flexible mesh upper that provides a comfortable and secure fit. Energy-returning boost™ keeps you light on your feet.',
+        },
+        imageUri:{
+          type: String,
+          value: 'http://www.footasylum.com/images/articles/nmd/nmd_carousel-03-150316.jpg',
+        }
+      },
+
+    });
+  </script>
+</dom-module>
