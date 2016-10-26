@@ -1,5 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-card/paper-card.html"
+<link rel="import" href="../paper-styles/color.html">
+<link rel="import" href="../paper-card/paper-card.html">
+<link rel="import" href="../paper-button/paper-button.html">
 
 <!--
 `pi-note`
@@ -9,40 +11,85 @@ PostIt Note WebComponent
 -->
 
 <dom-module id="pi-note">
-  <template>
-    <style>
-      :host {
-        display: block;
-        --paper-card-header-color: rgba(255,255,255,1;
-      }
+	<template>
+		<style>
+			:host {
+				display: block;
+				--paper-card-header-color: rgba(255,255,255,1);
+				padding: 10px;
+			}
+			paper-card {
+				width: 100%;
+			}
+			.high {
+				background: var(--paper-amber-900);
+			}
+			.low {
+				background: var(--paper-lime-500);
+			}
+			.neutral {
+				background: var(--paper-cyan-500);
+			}
+			.normal{
+				background: var(--paper-blue-grey-500);
+			}
+			paper-card.neutral, paper-card.low, paper-card.high, paper-card.normal {
+				color: white;
+				--paper-card-header-color: white;
+			}
+			paper-checkbox {
+				display: block;
+				margin-bottom: 4px;
+				--paper-checkbox-label-color: white;
+				--paper-checkbox-unchecked-color: white;
+			}
+			paper-icon-button {
+				color: var(--paper-grey-600);
+			}
+			paper-icon-button.white {
+				color: white !important;
+			}
 
-      #card-body{
-      }
-    </style>
-    <paper-card id="card-body" heading=[[title]] image=[[imageUri]] preloadImage=true fadeImage=true alt="demo card">
-      <div class="card-content">[[note]]</div>
-    </paper-card>
-  </template>
-  <script>
-    Polymer({
+		</style>
+		<paper-card id="noteContainer" class=[[priority-level]] heading=[[note-title]] image=[[image-uri]]  alt="Note on [[note-title]]">
+			<div class="card-content">[[note-text]]</div>
+			<div class="card-actions">
+				<paper-button>Done</paper-button>
+			</div>
+		</paper-card>
+	</template>
+	<script>
+		Polymer({
 
-      is: 'pi-note',
+			is: 'pi-note',
 
-      properties: {
-        title: {
-          type: String,
-          value: 'NMD_R1',
-        },
-        note: {
-          type: String,
-          value: 'Built for today\'s urban nomad, the NMD merges the best of adidas innovation with progressive street-ready design. Modern construction and archival adidas technologies come together with the sleek, running-inspired NMD_R1. The men\'s deconstructed shoes feature reflective 3-Stripes on a flexible mesh upper that provides a comfortable and secure fit. Energy-returning boost™ keeps you light on your feet.',
-        },
-        imageUri:{
-          type: String,
-          value: 'http://www.footasylum.com/images/articles/nmd/nmd_carousel-03-150316.jpg',
-        }
-      },
+			properties: {
+				noteTitle:{
+					type: String
+				},
+				noteText: {
+					type: String
+				},
+				imageUri:{
+					type: String
+				},
+				priorityLevel:{
+					type: String,
+					value: 'normal',
+				}
+			},
 
-    });
-  </script>
+			created: function(){
+				//console.log('In created');
+			},
+			ready: function(){
+				//console.log('In ready');
+			},
+			attached: function(){
+				//console.log('In attached');
+				//had to hack here as the class attribute on the paper-card does not bind. 
+				this.$.noteContainer.classList.add(this.priorityLevel);
+			}
+		});
+	</script>
 </dom-module>
