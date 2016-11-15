@@ -2,6 +2,9 @@
 <link rel="import" href="../paper-styles/color.html">
 <link rel="import" href="../paper-card/paper-card.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-item/paper-item.html">
 
 <!--
 `pi-note`
@@ -51,7 +54,21 @@ PostIt Note WebComponent
 			}
 
 		</style>
+
+
 		<paper-card id="noteContainer" class=[[priority-level]] heading=[[note-title]] image=[[image-uri]]  alt="Note on [[note-title]]">
+		
+
+			<div class="card-heading">
+				<paper-dropdown-menu label="priority">
+					<paper-listbox class="dropdown-content">
+						<paper-item> High </paper-item>
+						<paper-item> Normal </paper-item>
+						<paper-item> Low </paper-item>
+					</paper-listbox>
+				</paper-dropdown-menu>
+			</div>
+
 			<div class="card-content">[[note-text]]</div>
 			<div class="card-actions">
 				<paper-button>Done</paper-button>
@@ -78,7 +95,8 @@ PostIt Note WebComponent
 					value: 'normal',
 				},
 				priorityLevels:{	
-
+					type: Array,
+					value: ['high','normal','low']
 				}
 			},
 
