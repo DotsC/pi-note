@@ -2,6 +2,9 @@
 <link rel="import" href="../paper-styles/color.html">
 <link rel="import" href="../paper-card/paper-card.html">
 <link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-item/paper-item.html">
 
 <!--
 `pi-note`
@@ -15,12 +18,21 @@ PostIt Note WebComponent
 		<style>
 			:host {
 				display: block;
-				--paper-card-header-color: rgba(255,255,255,1);
 				padding: 10px;
+				--paper-dropdown-menu: {
+					width: 100px;
+					float: right;
+				};
 			}
+
 			paper-card {
 				width: 100%;
+				--paper-card-header-color: white;
+				--paper-card-content:{
+					color: white;
+				};
 			}
+
 			.high {
 				background: var(--paper-amber-900);
 			}
@@ -33,31 +45,52 @@ PostIt Note WebComponent
 			.normal{
 				background: var(--paper-blue-grey-500);
 			}
-			paper-card.neutral, paper-card.low, paper-card.high, paper-card.normal {
+
+			paper-dropdown-menu {
 				color: white;
-				--paper-card-header-color: white;
+				--paper-input-container-label: {
+					color: white;
+				};
+				--paper-input-container-input: {
+					color: white;
+				};
+				--paper-input-container-underline: {
+					color: white;
+     			display: none;
+				};
 			}
+
 			paper-checkbox {
 				display: block;
 				margin-bottom: 4px;
 				--paper-checkbox-label-color: white;
 				--paper-checkbox-unchecked-color: white;
 			}
+
 			paper-icon-button {
 				color: var(--paper-grey-600);
 			}
+
 			paper-icon-button.white {
 				color: white !important;
 			}
 
 		</style>
-		<paper-card id="noteContainer" class=[[priority-level]] heading=[[note-title]] image=[[image-uri]]  alt="Note on [[note-title]]">
+		<paper-card id="noteContainer" class$={{priorityLevel}} heading=[[noteTitle]] image=[[imageUri]]  alt="Note on [[note-title]]">
 			<div class="card-content">[[note-text]]</div>
 			<div class="card-actions">
-				<paper-button>Done</paper-button>
+			<!--<span> {{_getPriorityIndex(priorities, priorityLevel)}}  </span> --> 
+				<paper-dropdown-menu label="Priority" vertical-align="bottom" horizontal-align="left" noink no-animations >
+					<paper-listbox class="dropdown-content" selected="[[_getPriorityIndex(priorityLevel, priorities)]]">
+            <template is="dom-repeat" items="{{priorities}}">
+               <paper-item>{{item}}</paper-item>
+            </template>
+					</paper-listbox>
+				</paper-dropdown-menu>
 			</div>
 		</paper-card>
 	</template>
+
 	<script>
 		Polymer({
 
@@ -75,13 +108,20 @@ PostIt Note WebComponent
 				},
 				priorityLevel:{
 					type: String,
-					value: 'normal',
+					value: 'normal'
 				},
-				priorityLevels:{	
-
+				priorities:{	
+					type: Array,
+					value: ['high','normal','low']
 				}
 			},
 
+			listeners: {
+				'iron-select':'ironSelectHandler'
+			},
+			ironSelectHandler: function(evt){					
+				  this.priorityLevel = this.priorities[evt.target.selected];
+			},
 			created: function(){
 				//console.log('In created');
 			},
@@ -90,8 +130,17 @@ PostIt Note WebComponent
 			},
 			attached: function(){
 				//console.log('In attached');
-				//had to hack here as the class attribute on the paper-card does not bind. 
-				this.$.noteContainer.classList.add(this.priorityLevel);
+				//had to hack here as the class attribute on the paper-card does not bind.
+				//console.log(this.priorityLevel); 
+			 //	this.$.noteContainer.toggleClass(this.priorityLevel, true);
+
+			},
+			_getPriorityIndex: function(priorityLevel, priorities){
+				for(var i = 0; i < priorities.length; i++) {
+					if(priorityLevel == priorities[i]) {
+						return i;
+					}
+				}
 			}
 		});
 	</script>
